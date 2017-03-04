@@ -1,5 +1,6 @@
 % change test_bb to test_poly
-% char box
+% test_bb: x, y, w, h
+% test_poly: x1, y1, x2, y2, x3, y3, x4, y4
 %% dir and files
 testBase = '/home/lili/codes/ssd/caffe-ssd/data/shopSign';
 sourceDir = fullfile(testBase, 'test_bb');
@@ -28,7 +29,7 @@ for i = 1:nFile
             charBox = charWords(j).charbox;
             %displayBox([charBox, j*ones(size(charWords(j).charbox, 1), 1)], 'g', 'u');
             gtP = getCornerPoints(charBox);
-            poly = minBoundingBox(gtP);
+            poly = minBoundingBox(gtP); % x1, x2, x3, x4; y1, y2, y3, y4
             %displayEightBox(poly,'b');
             polys = [polys; ceil(poly(:))'];
         end

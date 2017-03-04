@@ -1,4 +1,4 @@
-% evaluatePoly_shopSign
+% testShowPoly
 clear all;
 
 %% dirs and files
@@ -11,29 +11,20 @@ dtDir = '/home/lili/codes/ssd/caffe-ssd/data/shopSign/test_poly';
 %% process each image
 nImg = length(imgName);
 for i = 1: nImg
+    if i < 5
+        continue;
+    end
+    fprintf('%d:%s\n', i, imgName{i});
     
     gtFile = fullfile(gtDir, [imgName{i}, '.txt']);
     dtFile = fullfile(dtDir, ['res_', imgName{i}, '.txt']);
     gtPoly = importdata(gtFile);
     dtPoly = importdata(dtFile);
-    
-    [recall, precision, fscore, evalInfo(i)] = evalDetPoly(dtPoly, gtPoly);
-    
+    angleBoxes = fromPolyToAngleBox(dtPoly);
     % show image and poly
     image = imread(fullfile(imgDir, [imgName{i}, '.jpg']));
-    %     imshow(image);
-    %     displayEightPoly(gtPoly, 'r');
-    %     displayEightPoly(dtPoly, 'g');
-    fprintf('%d:%s:\n', i, imgName{i});
-    fprintf('recall = %.3f, precision = %.3f, f-score = %.3f\n', recall, precision, fscore);
-    
+    imshow(image);
+%     displayEightPoly(gtPoly, 'r');
+%     displayEightPoly(dtPoly, 'g');
+    displayAngleBox(angleBoxes);
 end
-% total
-recall =  sum( [evalInfo.tr] ) / sum( [evalInfo.nG] );
-precision = sum( [evalInfo.tp] ) / sum( [evalInfo.nD] );
-if recall + precision > 0
-    fscore = 2 * recall * precision / (recall + precision);
-else
-    fscore = 0;
-end
-fprintf('\nrecall = %.3f, precision = %.3f, fmeasure = %.3f\n', recall, precision, fscore);
