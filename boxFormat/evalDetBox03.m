@@ -64,7 +64,7 @@ evalInfo.scoreMatrix = [];
 if( nD == 0 || nG == 0 )
     return;
 end
-assert( size(detectBox,2) == 4 );
+%assert( size(detectBox,2) == 4 );
 assert( size(gtBox,2) == 4 );
 
 %% sort

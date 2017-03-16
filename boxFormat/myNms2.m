@@ -1,5 +1,8 @@
 function box = myNms2( box, scoreThreshold, overlap1Threshold, overlap2Threshold )
- if nargin < 3
+if isempty(box)
+    return;
+end
+if nargin < 3
      overlap1Threshold = 0.5;
      overlap2Threshold = 0.25;
  end

@@ -1,14 +1,14 @@
 % evaluate_MSRAChi_multi
 clear all;
 
-DISPLAY = 0;
+DISPLAY = 1;
 MULTI = 1; %1-multi, 0-single
 SCORESHOLD = 0.1;
 
 %% dirs and files
 datasetName = 'MSRATD500';
-TYPE = 'boxChineseWord';
-dtDirName = 'MSRAChi';
+TYPE = 'boxEnglishWord';
+dtDirName = 'MSRAEng';
 
 imgDataBase = '/home/lili/datasets/';
 ssdDataBase = '/home/lili/codes/ssd/caffe-ssd/data';
@@ -21,9 +21,9 @@ imgFiles = dir(fullfile(imgDir, '*.jpg'));
 nImg = length(imgFiles);
 %nImg = 50;
 for i = 1: nImg
-%         if i < 20
-%             continue;
-%         end
+        if i < 20
+            continue;
+        end
     imgRawName = imgFiles(i).name;
     gtFile = fullfile(gtDir, [imgRawName(1:end-3), 'txt']);
     dtFile = fullfile(dtDir, ['res_', imgRawName(1:end-3), 'txt']);
@@ -37,13 +37,12 @@ for i = 1: nImg
     if ~isempty(dtBox)
         dtBox = dtBox(dtBox(:, 5) > SCORESHOLD, :);
     end
-    % single or multi scale
     if MULTI
         dtBox = myNms2(dtBox, 1.3);
     else
         dtBox = myNms(dtBox, 0.25);
     end
-
+    
     [recall, precision, fscore, evalInfo(i)] = evalDetBox03(dtBox, gtBox);
     
     % show image and poly
